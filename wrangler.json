@@ -1,0 +1,16 @@
+{
+	"compatibility_date": "2025-10-08",
+	"main": "src/index.ts",
+	"name": "api-fishbyte",
+	"upload_source_maps": true,
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_id": "cfda9c0d-2d15-4f4e-977a-a1ca61238cd0",
+			"database_name": "api-fishbyte-database"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
