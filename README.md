@@ -1,5 +1,3 @@
-# API - FishByte
-
 ## ✨ 项目简介
 
 - 采用 **Hono** 轻量 Web 框架，基于 Cloudflare Workers 运行，性能优越
@@ -35,7 +33,7 @@ pnpm dev
 pnpm deploy
 ```
 
-## 🗄️ 数据库迁移
+## 🗄️ 数据库操作
 
 ```bash
 # 本地迁移
@@ -43,6 +41,9 @@ pnpm seedLocalD1
 
 # 线上迁移
 pnpm predeploy
+
+# 线上执行所有数据库SQL
+npx wrangler d1 migrations apply DB --remote
 ```
 
 ## 📦 技术栈

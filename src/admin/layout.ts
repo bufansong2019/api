@@ -3,10 +3,11 @@ export function layout(title: string, content: string, username?: string): strin
 		? `<li><span style="color:var(--pico-muted-color);font-size:0.9rem">${username}</span></li>`
 		: "";
 	return `<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"))})();</script>
   <title>${title} - FishByte Admin</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <style>
@@ -52,9 +53,8 @@ export function layout(title: string, content: string, username?: string): strin
   <script>
     const html = document.documentElement;
     const toggle = document.getElementById("theme-toggle");
-    const saved = localStorage.getItem("theme") || "light";
-    html.setAttribute("data-theme", saved);
-    toggle.textContent = saved === "dark" ? "深色模式" : "浅色模式";
+    const current = html.getAttribute("data-theme");
+	    toggle.textContent = current === "dark" ? "深色模式" : "浅色模式";
     toggle.addEventListener("click", (e) => {
       e.preventDefault();
       const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";

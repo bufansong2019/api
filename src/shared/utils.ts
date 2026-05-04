@@ -1,6 +1,10 @@
 export function localTime(): string {
-	const n = new Date();
-	return n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0") + " " + String(n.getHours()).padStart(2, "0") + ":" + String(n.getMinutes()).padStart(2, "0") + ":" + String(n.getSeconds()).padStart(2, "0");
+	const d = new Date();
+	// UTC+8 (Asia/Shanghai)
+	const utc8 = new Date(d.getTime() + 8 * 3600 * 1000);
+	const pad = (n: number) => String(n).padStart(2, "0");
+	return utc8.getUTCFullYear() + "-" + pad(utc8.getUTCMonth() + 1) + "-" + pad(utc8.getUTCDate())
+		+ " " + pad(utc8.getUTCHours()) + ":" + pad(utc8.getUTCMinutes()) + ":" + pad(utc8.getUTCSeconds());
 }
 
 export function base64Url(str: string): string {
