@@ -16,7 +16,7 @@ function maskKey(key: string): string {
 }
 
 export function tablePage(tableName: string, columns: ColumnInfo[], rows: Record<string, unknown>[], page: number, total: number, filters: Record<string, string>, pkName: string, username?: string): string {
-	const displayCols = columns.filter((c) => c.name !== pkName);
+	const displayCols = columns.filter((c) => c.name !== "rowid");
 	const headers = displayCols.map((c) => `<th>${c.name}</th>`).join("") + "<th>操作</th>";
 	const isApiKeys = tableName === "api_keys";
 	const body = rows
