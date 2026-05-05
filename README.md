@@ -1,6 +1,6 @@
 ## ✨ 项目简介
 
-- 采用 **Hono** 轻量 Web 框架，基于 Cloudflare Workers 运行，性能优越
+- 采用 **Hono** 轻量 Web 框架，性能优越
 
 - 搭配 **Drizzle ORM** 操作 D1 数据库，类型安全、语法简洁
 
@@ -9,10 +9,6 @@
 - 使用 **JWT** 身份认证 + **PBKDF2** 密码加密，安全可靠
 
 - 纯 TypeScript 编写，全栈类型安全
-
-## 🌐 在线访问
-
-管理后台已部署至 Cloudflare Workers：[👉 FishByte 管理后台](https://api-fishbyte.bufansong2019.workers.dev/admin/login)
 
 ## 🚀 本地运行
 
@@ -29,8 +25,8 @@ pnpm install
 # 初始化本地 D1 数据库并启动开发服务器
 pnpm dev
 
-# 部署到 Cloudflare Workers
-pnpm deploy
+# 手动部署到 Cloudflare Workers
+npx wrangler deploy
 ```
 
 ## 🗄️ 数据库操作
