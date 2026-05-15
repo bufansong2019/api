@@ -14,10 +14,10 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/bufansong2019/api-fishbyte.git
+git clone https://github.com/bufansong2019/api.git
 
 # 进入目录
-cd api-fishbyte
+cd api
 
 # 安装依赖
 pnpm install

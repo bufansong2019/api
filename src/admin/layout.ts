@@ -8,7 +8,7 @@ export function layout(title: string, content: string, username?: string): strin
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"))})();</script>
-  <title>${title} - FishByte Admin</title>
+  <title>${title} Admin</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <style>
     body { margin: 0; }
@@ -35,7 +35,7 @@ export function layout(title: string, content: string, username?: string): strin
 <body>
   <header class="container">
     <nav>
-      <ul><li><strong><a href="/admin/home">API - FishByte 管理后台</a></strong></li></ul>
+      <ul><li><strong><a href="/admin/home">API 管理后台</a></strong></li></ul>
       <ul>
         <li><a href="/admin/dashboard">控制台</a></li>
         <li><a href="/admin/users">用户管理</a></li>
@@ -48,7 +48,7 @@ export function layout(title: string, content: string, username?: string): strin
   </header>
   <main class="container">${content}</main>
   <footer style="text-align:center;padding:0.75rem 0;font-size:0.8rem;color:var(--pico-muted-color);background:var(--pico-background-color);z-index:10">
-    <p>API - FishByte 管理后台 &copy; ${new Date().getFullYear()}</p>
+    <p>API 管理后台 &copy; ${new Date().getFullYear()}</p>
   </footer>
   <script>
     const html = document.documentElement;

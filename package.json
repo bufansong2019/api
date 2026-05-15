@@ -1,8 +1,8 @@
 {
 	"name": "api-fishbyte",
-	"description": "API - FishByte 管理后台",
+	"description": "API 管理后台",
 	"cloudflare": {
-		"label": "API - FishByte 管理后台",
+		"label": "API 管理后台",
 		"products": [
 			"Workers",
 			"D1"

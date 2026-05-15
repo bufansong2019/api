@@ -6,7 +6,7 @@ export function loginPage(error?: string): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"))})();</script>
-  <title>登录 - FishByte Admin</title>
+  <title>登录 Admin</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <style>
     .tab-bar { display: flex; gap: 0; border-bottom: 2px solid var(--pico-muted-border-color); margin-bottom: var(--pico-spacing); }
@@ -22,7 +22,7 @@ export function loginPage(error?: string): string {
   <main class="container">
     <article>
       <hgroup>
-        <h1>API - FishByte</h1>
+        <h1>API</h1>
         <p>登录管理后台</p>
       </hgroup>
       ${errHtml}
