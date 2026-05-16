@@ -1,5 +1,6 @@
 import { Hono } from "hono";
-import { authGuard } from "../../middleware/auth";
+import { authGuard } from "../../../middleware/auth";
+import { fail } from "../../../shared/response";
 
 const proxy = new Hono<{ Bindings: Env }>();
 
@@ -18,25 +19,25 @@ function isInternalHost(hostname: string): boolean {
   return INTERNAL_PATTERNS.some((pattern) => pattern.test(hostname));
 }
 
-proxy.get("/proxyRednote", authGuard, async (c) => {
+proxy.get("/proxyDownload", authGuard, async (c) => {
   const urlStr = c.req.query("url");
   if (!urlStr) {
-    return c.json({ error: "url query parameter is required" }, 400);
+    return fail(c, "缺少url参数", 400);
   }
 
   let url: URL;
   try {
     url = new URL(urlStr);
   } catch {
-    return c.json({ error: "Invalid URL" }, 400);
+    return fail(c, "无效的URL", 400);
   }
 
   if (url.protocol !== "http:" && url.protocol !== "https:") {
-    return c.json({ error: "Only http and https URLs are allowed" }, 400);
+    return fail(c, "只允许http和https链接", 400);
   }
 
   if (isInternalHost(url.hostname)) {
-    return c.json({ error: "Internal addresses are not allowed" }, 400);
+    return fail(c, "不允许访问内网地址", 400);
   }
 
   try {
@@ -54,7 +55,7 @@ proxy.get("/proxyRednote", authGuard, async (c) => {
       headers,
     });
   } catch {
-    return c.json({ error: "Failed to fetch the target URL" }, 502);
+    return fail(c, "获取目标地址失败", 502);
   }
 });
 

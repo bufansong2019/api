@@ -4,6 +4,7 @@ import { apiKeys } from "../db/schema";
 import { type Context, type Next } from "hono";
 import { getCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
+import { fail } from "../shared/response";
 
 export interface AuthUser {
 	type: "api_key" | "jwt";
@@ -80,7 +81,7 @@ export async function authGuard(c: Context, next: Next) {
 		}
 	}
 
-	return c.json({ error: "Unauthorized" }, 401);
+	return fail(c, "未登录或登录已过期", 401);
 }
 
 export async function adminGuard(c: Context, next: Next) {
@@ -101,7 +102,7 @@ export async function adminGuard(c: Context, next: Next) {
 	if (accept.includes("text/html")) {
 		return c.redirect("/admin/login", 302);
 	}
-	return c.json({ error: "Forbidden" }, 403);
+	return fail(c, "无权限访问", 403);
 }
 
 export function generateApiKey(): string {
