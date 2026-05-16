@@ -3,7 +3,7 @@ import { eq, and } from "drizzle-orm";
 import { apiKeys } from "../db/schema";
 import { type Context, type Next } from "hono";
 import { getCookie } from "hono/cookie";
-import { sign, verify } from "hono/jwt";
+import { verify } from "hono/jwt";
 import { fail } from "../shared/response";
 
 export interface AuthUser {
@@ -53,19 +53,6 @@ async function verifyToken(token: string, env: Env): Promise<AuthUser | null> {
 	} catch {
 		return null;
 	}
-}
-
-export async function signAdminToken(env: Env): Promise<string> {
-	return await sign(
-		{
-			sub: 0,
-			username: "Admin",
-			role: "admin",
-			exp: Math.floor(Date.now() / 1000) + 28800,
-		},
-		env.JWT_SECRET,
-		"HS256",
-	);
 }
 
 export async function authGuard(c: Context, next: Next) {

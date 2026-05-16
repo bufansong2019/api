@@ -48,11 +48,11 @@ export function tablePage(tableName: string, columns: ColumnInfo[], rows: Record
 		</form>` : "";
 
 	return layout(
-		`${tableName} - 控制台`,
+		`${tableName} - 仪表盘`,
 		`
 		${filterBar}
 		<nav>
-		  <ul><li><a href="/admin/dashboard">&larr; 控制台</a></li></ul>
+		  <ul><li><a href="/admin/dashboard">&larr; 仪表盘</a></li></ul>
 		  <ul><li><strong>${tableName}</strong></li></ul>
 		</nav>
 		<figure id="table-section">

@@ -9,7 +9,7 @@ export interface ActivityLogRow {
 	createdAt: string;
 }
 
-export function homePage(username: string, logs: ActivityLogRow[], total: number, page: number, limit: number, activeKeys: number, totalUsers: number): string {
+export function homePage(username: string, logs: ActivityLogRow[], total: number, page: number, limit: number, activeKeys: number, totalUsers: number, totalRequests: number = 0): string {
 	const logRows = logs
 		.map(
 			(l) => `
@@ -28,7 +28,7 @@ export function homePage(username: string, logs: ActivityLogRow[], total: number
 	      <p id="clock" style="font-size:2rem;margin-top:1rem"></p>
 	    </div>
 	    <div class="grid" style="margin-top:3rem">
-	      <article><header>总请求数</header><p style="font-size:2rem;font-weight:700;text-align:center">12,847</p></article>
+	      <article><header>总请求数</header><p style="font-size:2rem;font-weight:700;text-align:center">${totalRequests.toLocaleString()}</p></article>
 	      <article><header>活跃密钥</header><p style="font-size:2rem;font-weight:700;text-align:center">${activeKeys}</p></article>
 	      <article><header>注册用户</header><p style="font-size:2rem;font-weight:700;text-align:center">${totalUsers}</p></article>
 	    </div>

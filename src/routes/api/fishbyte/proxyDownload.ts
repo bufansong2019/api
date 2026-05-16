@@ -41,7 +41,9 @@ proxy.get("/proxyDownload", authGuard, async (c) => {
   }
 
   try {
-    const response = await fetch(url.toString());
+    const response = await fetch(url.toString(), {
+      signal: AbortSignal.timeout(30000),
+    });
 
     // Forward relevant headers
     const headers = new Headers();

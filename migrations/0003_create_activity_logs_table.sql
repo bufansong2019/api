@@ -1,4 +1,4 @@
--- Migration number: 0004 	 2026-05-04T20:00:00.000Z
+-- Migration number: 0003 	 2026-05-04T20:00:00.000Z
 CREATE TABLE IF NOT EXISTS activity_logs (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     user TEXT NOT NULL,

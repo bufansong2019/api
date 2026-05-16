@@ -37,7 +37,7 @@ export function layout(title: string, content: string, username?: string): strin
     <nav>
       <ul><li><strong><a href="/admin/home">API 管理后台</a></strong></li></ul>
       <ul>
-        <li><a href="/admin/dashboard">控制台</a></li>
+        <li><a href="/admin/dashboard">仪表盘</a></li>
         <li><a href="/admin/users">用户管理</a></li>
         <li><a href="/admin/api-keys">API 密钥管理</a></li>
         <li><a href="#" id="theme-toggle">浅色模式</a></li>

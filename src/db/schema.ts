@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, unique } from "drizzle-orm/sqlite-core";
 
 export const users = sqliteTable("users", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
@@ -16,6 +16,15 @@ export const apiKeys = sqliteTable("api_keys", {
 	enabled: integer("enabled").notNull().default(1),
 	createdAt: text("created_at").notNull().default("datetime('now')"),
 });
+
+export const requestStats = sqliteTable("request_stats", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	date: text("date").notNull(),
+	path: text("path").notNull(),
+	count: integer("count").notNull().default(1),
+}, (t) => ({
+	uniqueDatePath: unique().on(t.date, t.path),
+}));
 
 export const activityLogs = sqliteTable("activity_logs", {
 	id: integer("id").primaryKey({ autoIncrement: true }),

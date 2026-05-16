@@ -12,9 +12,16 @@ getProvince.get("/getProvince", authGuard, async (c) => {
   }
 
   const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=zh&zoom=5`;
-  const res = await fetch(url, {
-    headers: { "User-Agent": "FishByteAPI/1.0" },
-  });
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      headers: { "User-Agent": "FishByteAPI/1.0" },
+      signal: AbortSignal.timeout(5000),
+    });
+  } catch {
+    return fail(c, "获取位置信息失败", 502);
+  }
 
   if (!res.ok) {
     return fail(c, "获取位置信息失败", 502);

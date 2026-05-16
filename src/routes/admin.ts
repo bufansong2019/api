@@ -2,9 +2,9 @@ import { Hono } from "hono";
 import { setCookie, deleteCookie } from "hono/cookie";
 import { sign } from "hono/jwt";
 import { drizzle } from "drizzle-orm/d1";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql } from "drizzle-orm";
 import { localTime, base64Url, hashPassword } from "../shared/utils";
-import { users, apiKeys, activityLogs } from "../db/schema";
+import { users, apiKeys, activityLogs, requestStats } from "../db/schema";
 import { adminGuard, generateApiKey } from "../middleware/auth";
 import { loginPage } from "../admin/login";
 import { homePage } from "../admin/home";
@@ -54,7 +54,7 @@ admin.post("/login", async (c) => {
 			if (body.key === c.env.API_KEY) {
 				keyName = "Master Key";
 			} else {
-				const row = await drizzle(c.env.DB).select({ name: apiKeys.name }).from(apiKeys).where(eq(apiKeys.key, body.key)).get();
+				const row = await drizzle(c.env.DB).select({ name: apiKeys.name }).from(apiKeys).where(and(eq(apiKeys.key, body.key), eq(apiKeys.enabled, 1))).get();
 				if (!row) { keyName = ""; } else { keyName = "API Key（" + row.name + "）"; }
 			}
 			if (keyName) {
@@ -97,15 +97,17 @@ admin.get("/home", adminGuard, async (c) => {
 	const totalResult = await db.select({ count: sql<number>`count(*)` }).from(activityLogs);
 	const total = Number(totalResult[0]?.count) || 0;
 
-	const activeKeysResult = await db.select({ count: sql<number>`count(*)` }).from(apiKeys).where(eq(apiKeys.enabled, 1));
-	const totalUsersResult = await db.select({ count: sql<number>`count(*)` }).from(users);
-	const activeKeys = Number(activeKeysResult[0]?.count) || 0;
-	const totalUsers = Number(totalUsersResult[0]?.count) || 0;
+		const activeKeysResult = await db.select({ count: sql<number>`count(*)` }).from(apiKeys).where(eq(apiKeys.enabled, 1));
+		const totalUsersResult = await db.select({ count: sql<number>`count(*)` }).from(users);
+		const totalRequestsResult = await db.select({ total: sql<number>`COALESCE(SUM(count), 0)` }).from(requestStats);
+		const activeKeys = Number(activeKeysResult[0]?.count) || 0;
+		const totalUsers = Number(totalUsersResult[0]?.count) || 0;
+		const totalRequests = Number(totalRequestsResult[0]?.total) || 0;
 
-	return c.html(homePage(user.username || user.keyName || "Admin", logs, total, page, limit, activeKeys, totalUsers));
+		return c.html(homePage(user.username || user.keyName || "Admin", logs, total, page, limit, activeKeys, totalUsers, totalRequests));
 });
 
-// 数据库概览：列出所有表及其行数
+// 控制台：数据库概览 + 请求统计
 admin.get("/dashboard", adminGuard, async (c) => {
 	try {
 		const tables = await c.env.DB.prepare("PRAGMA table_list").all<{ name: string }>();
@@ -123,7 +125,22 @@ admin.get("/dashboard", adminGuard, async (c) => {
 			}
 		}
 
-		return c.html(dashboard(stats, c.get("user").username || c.get("user").keyName));
+		// 请求统计
+		const db = drizzle(c.env.DB);
+		const today = new Date().toISOString().slice(0, 10);
+		const totalRow = await db.select({ total: sql`COALESCE(SUM(count), 0)` }).from(requestStats).get();
+		const todayRow = await db.select({ total: sql`COALESCE(SUM(count), 0)` }).from(requestStats).where(eq(requestStats.date, today)).get();
+		const allTimePaths = await db.select({ path: requestStats.path, count: sql<number>`SUM(${requestStats.count})` }).from(requestStats).groupBy(requestStats.path).orderBy(desc(sql`SUM(${requestStats.count})`)).limit(7).all();
+		const todayPaths = await db.select({ path: requestStats.path, count: requestStats.count }).from(requestStats).where(eq(requestStats.date, today)).orderBy(desc(requestStats.count)).limit(7).all();
+
+		return c.html(dashboard(
+			stats,
+			c.get("user").username || c.get("user").keyName,
+			Number(totalRow?.total) || 0,
+			Number(todayRow?.total) || 0,
+			allTimePaths || [],
+			todayPaths || [],
+		));
 	} catch (e) {
 		return c.text(`Error: ${e instanceof Error ? e.message : String(e)}`, 500);
 	}
